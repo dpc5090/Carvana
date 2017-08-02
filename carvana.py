@@ -57,10 +57,51 @@ plt.show()
 
 import glob
 filelist = glob.glob('*.jpg')
-shapelist = []
-for x in filelist:
-    img = mpimg.imread(x)
-    if img.shape not in shapelist:
-        shapelist.append(img.shape)
-    
+#shapes of all images 1280,1918,3
+
+img=mpimg.imread('00087a6bd4dc_01.jpg')
+greyscaleimg = []
+for x in img:
+    for y in x:
+        greyscaleimg.append((int(y[0])+int(y[1])+int(y[2]))/3)
         
+img_grey = np.array(greyscaleimg)
+img_grey.shape = (1280,1918)
+plt.imshow(img_grey)
+        
+i = 1918
+j = 1280
+pix = 20
+patches = []
+for x in range(0,j/pix):
+    for y in range(0,i/pix):
+        patches.append([[x*pix,x*pix+pix-1],[y*pix,y*pix+pix-1]])
+        
+
+
+smallimg = []
+for patch in patches:
+    smallimg.append(np.mean(img_grey[patch[0][0]:patch[0][1]+1,patch[1][0]:patch[1][1]+1]))
+
+smallimg = np.array(smallimg)
+smallimg.shape = (j/pix,i/pix)
+plt.imshow(smallimg)
+
+def downsample(img,ratio):
+    i = 1918
+    j = 1280
+    pix = ratio
+    patches = []
+    for x in range(0,j/pix):
+        for y in range(0,i/pix):
+            patches.append([[x*pix,x*pix+pix-1],[y*pix,y*pix+pix-1]])
+            
+    smallimg = []
+    for patch in patches:
+        smallimg.append(np.mean(img[patch[0][0]:patch[0][1]+1,patch[1][0]:patch[1][1]+1]))
+    
+    smallimg = np.array(smallimg)
+    smallimg.shape = (j/pix,i/pix)
+    plt.imshow(smallimg)
+    
+
